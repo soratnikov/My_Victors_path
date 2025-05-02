@@ -414,7 +414,8 @@ def generate_map():
     for y in range(room_height - 2):
         room_map.append([side_edge]
                         + [floor_type]*(room_width - 2) + [side_edge])
-    # Add bottom line of room map.
+
+# Add bottom line of room map.
     room_map.append([bottom_edge] * room_width)
 
     # Add doorways.
@@ -428,7 +429,10 @@ def generate_map():
 
     if current_room % MAP_WIDTH != 1: # If room is not on left of map
         room_to_left = GAME_MAP[current_room - 1]
+
         # If room on the left has a right exit, add left exit in this room
+
+
         if room_to_left[4]: 
             room_map[middle_row][0] = floor_type 
             room_map[middle_row + 1][0] = floor_type
@@ -441,8 +445,12 @@ def generate_map():
 
     if current_room <= MAP_SIZE - MAP_WIDTH: # If room is not on bottom row
         room_below = GAME_MAP[current_room+MAP_WIDTH]
+
+
         # If room below has a top exit, add exit at bottom of this one
-        if room_below[3]: 
+
+
+        if room_below[3]:
             room_map[room_height-1][middle_column] = floor_type 
             room_map[room_height-1][middle_column + 1] = floor_type
             room_map[room_height-1][middle_column - 1] = floor_type
@@ -643,7 +651,7 @@ def game_loop():
 ###############
 ##  DISPLAY  ##
 ###############
-            
+
 def draw_image(image, y, x):
     screen.blit(
         image,
@@ -705,18 +713,21 @@ def draw():
                     and y == room_height - 1
                     and room_map[y][x] == 1
                     and x > 0
-                    and x < room_width - 1): 
+                    and x < room_width - 1):
+
                     # Add transparent wall image in the front row.
                     image = PILLARS[wall_transparency_frame]
-               
                 draw_image(image, y, x)
 
                 if objects[item_here][1] is not None: # If object has a shadow
+
                     shadow_image = objects[item_here][1]
+
                     # if shadow might need horizontal tiling
                     if shadow_image in [images.half_shadow,
                                         images.full_shadow]:
                         shadow_width = int(image.get_width() / TILE_SIZE)
+
                         # Use shadow across width of object.
                         for z in range(0, shadow_width):
                             draw_shadow(shadow_image, y, x+z)
@@ -762,6 +773,7 @@ def show_text(text_to_show, line_number):
 # Props are objects that may move between rooms, appear or disappear.
 # All props must be set up here. Props not yet in the game go into room 0.
 # object number : [room, y, x]
+
 props = {
     20: [31, 0, 4], 21: [26, 0, 1], 22: [41, 0, 2], 23: [39, 0, 5],
     24: [45, 0, 2],
@@ -777,6 +789,7 @@ props = {
     }
 
 checksum = 0
+
 for key, prop in props.items():
     if key != 71: # 71 is skipped because it's different each game.
         checksum += (prop[0] * key
@@ -830,9 +843,12 @@ def get_item_under_player():
 def pick_up_object():
     global room_map
     # Get object number at player's location.
+
     item_player_is_on = get_item_under_player()
     if item_player_is_on in items_player_may_carry:
+
         # Clear the floor space.
+
         room_map[player_y][player_x] = get_floor_type() 
         add_object(item_player_is_on)
         show_text("Now carrying " + objects[item_player_is_on][3], 0)
@@ -910,6 +926,7 @@ def examine_object():
         # props = object number: [room number, y, x]
         if details[0] == current_room: # if prop is in the room
             # If prop is hidden (= at player's location but not on map)
+
             if (details[1] == player_y
                 and details[2] == left_tile_of_item 
                 and room_map[details[1]][details[2]] != prop_number):
@@ -929,7 +946,9 @@ def use_object():
     global in_my_pockets, suit_stitched, air_fixed, game_over
 
     use_message = "You fiddle around with it but don't get anywhere."
+
     standard_responses = {
+
         4: "Air is running out! You can't take this lying down!",
         6: "This is no time to sit around!",
         7: "This is no time to sit around!",
@@ -970,8 +989,11 @@ def use_object():
         show_text(use_message, 0)
         sounds.say_status_report.play()
         time.sleep(0.5)
+
         # If "on" the computer, player intention is clearly status update.
         # Return to stop another object use accidentally overriding this.
+
+
         return
 
     elif item_carrying == 60 or item_player_is_on == 60: 
@@ -1055,6 +1077,8 @@ Rendezvous Sector 13, outside."
             use_message = "You combine " + objects[ingredient1][3] \
                           + " and " + objects[ingredient2][3] \
                           + " to make " + objects[combination][3]
+
+
             if item_player_is_on in props.keys(): 
                 props[item_player_is_on][0] = 0 
                 room_map[player_y][player_x] = get_floor_type()
@@ -1156,6 +1180,7 @@ def shut_engineering_door():
     props[26][0] = 27 # Door inside engineering bay.
     generate_map() # Add door to room_map for if in affected room.
     if current_room == 27:
+
         close_door(26)
     if current_room == 32:
         close_door(25)
@@ -1226,7 +1251,7 @@ def end_the_game(reason):
     sounds.gameover.play()
     screen.draw.text("GAME OVER", (120, 400), color = "white",
                      fontsize = 128, shadow = (1, 1), scolor = "black")
-    
+
 def air_countdown():
     global air, game_over
     if game_over:
