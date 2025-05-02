@@ -20,9 +20,9 @@ HEIGHT = 800
 
 # Переменные игрока
 PLAYER_NAME = "Виктор" # измените это на своё имя!
-FRIEND1_NAME = "Саша" # измените это на имя друга!
-FRIEND2_NAME = "Leo" # измените это на имя другого друга!
-current_room = 1 # начальная комната = 31
+FRIEND1_NAME = "Саша" # измените это на имя первого друга!
+FRIEND2_NAME = "Leo" # измените это на имя второго друга!
+current_room = 31 # начальная комната = 31
 
 top_left_x = 100
 top_left_y = 150
@@ -96,6 +96,7 @@ YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (128, 0, 0)
+PURPLE = (128, 0, 54)
 
 air, energy = 100, 100
 suit_stitched, air_fixed = False, False
@@ -114,19 +115,19 @@ GAME_MAP = [ ["Комната 0 - где хранятся неиспользуе
 
 outdoor_rooms = range(1, 26)
 for planetsectors in range(1, 26): # здесь создаются комнаты с 1 по 25
-    GAME_MAP.append( ["Пыльная поверхность планеты", 13, 13, True, True] )
+    GAME_MAP.append( ["Пыльная поверхность Марса", 13, 13, True, True] )
 
 GAME_MAP += [
     # ["Название комнаты", высота, ширина, выход сверху?, выход справа?]
-    ["Воздушный шлюз", 13, 5, True, False], # комната 26
-    ["Инженерная лаборатория", 13, 13, False, False], # комната 27
-    ["Центр управления полётами", 9, 13, False, True], # комната 28
-    ["Смотровая галерея", 9, 15, False, False], # комната 29
-    ["Ванная комната экипажа", 5, 5, False, False], # комната 30
-    ["Входной шлюз", 7, 11, True, True], # комната 31
-    ["Комната левого локтя", 9, 7, True, False], # комната 32
-    ["Комната правого локтя", 7, 13, True, True], # комната 33
-    ["Научная лаборатория", 13, 13, False, True], # комната 34
+    ["Воздушный шлюз.", 13, 5, True, False], # комната 26
+    ["Инженерная лаборатория.", 13, 13, False, False], # комната 27
+    ["Центр управления полётами.", 9, 13, False, True], # комната 28
+    ["Смотровая галерея.", 9, 15, False, False], # комната 29
+    ["Ванная комната экипажа.", 5, 5, False, False], # комната 30
+    ["Входной шлюз.", 7, 11, True, True], # комната 31
+    ["Комната левого крыла.", 9, 7, True, False], # комната 32
+    ["Комната правого крыла.", 7, 13, True, True], # комната 33
+    ["Научная лаборатория.", 13, 13, False, True], # комната 34
     ["Оранжерея", 13, 13, True, False], # комната 35
     [PLAYER_NAME + "спальня", 9, 11, False, False], # комната 36
     ["Западный коридор", 15, 5, True, True], # комната 37
@@ -154,47 +155,47 @@ assert len(GAME_MAP ) -1 == MAP_SIZE, "Размер карты и GAME_MAP не 
 #############
 
 objects = {
-    0: [images.floor, None, "Пол блестящий и чистый"],
-    1: [images.pillar, images.full_shadow, "Стена гладкая и холодная"],
+    0: [images.floor, None, "Пол блестящий и чистый."],
+    1: [images.pillar, images.full_shadow, "Стена гладкая и холодная."],
     2: [images.soil, None, "Это похоже на пустыню. Или это должен быть десерт?"],
-    3: [images.pillar_low, images.half_shadow, "Стена гладкая и холодная"],
-    4: [images.bed, images.half_shadow, "Аккуратная и удобная кровать"],
-    5: [images.table, images.half_shadow, "Стол. Он сделан из прочного пластика"],
-    6: [images.chair_left, None, "Стул с мягкой подушкой"],
-    7: [images.chair_right, None, "Стул с мягкой подушкой"],
+    3: [images.pillar_low, images.half_shadow, "Стена гладкая и холодная."],
+    4: [images.bed, images.half_shadow, "Аккуратная и удобная кровать."],
+    5: [images.table, images.half_shadow, "Стол. Он сделан из прочного пластика."],
+    6: [images.chair_left, None, "Стул с мягкой подушкой."],
+    7: [images.chair_right, None, "Стул с мягкой подушкой."],
     8: [images.bookcase_tall, images.full_shadow,
-    "Книжные полки, заставленные справочниками"],
+    "Книжные полки, заставленные справочниками."],
     9: [images.bookcase_small, images.half_shadow,
-        "Книжные полки, заставленные справочниками"],
+        "Книжные полки, заставленные справочниками."],
     10: [images.cabinet, images.half_shadow,
-         "Небольшой шкафчик для хранения личных вещей"],
+         "Небольшой шкафчик для хранения личных вещей."],
     11: [images.desk_computer, images.half_shadow,
-         "Компьютер. Используйте его для запуска диагностики жизнеобеспечения"],
-         12: [images.plant, images.plant_shadow, "Растение космической рябины, выращенное здесь"],
+         "Компьютер. Используйте его для запуска диагностики жизнеобеспечения."],
+         12: [images.plant, images.plant_shadow, "Растение космической рябины, выращенное здесь."],
     13: [images.electrical1, images.half_shadow,
-         "Электрические системы, используемые для питания космической станции"],
+         "Электрические системы, используемые для питания космической станции."],
     14: [images.electrical2, images.half_shadow,
-         "Электрические системы, используемые для питания космической станции"],
+         "Электрические системы, используемые для питания космической станции."],
     15: [images.cactus, images.cactus_shadow, "Ой! Осторожнее с кактусом!"],
     16: [images.shrub, images.shrub_shadow,
     "Космический салат-латук. Немного вялый, но удивительно, что он здесь растет!"],
-    17: [images.pipes1, images.pipes1_shadow, "Трубы для очистки воды"],
+    17: [images.pipes1, images.pipes1_shadow, "Трубы для очистки воды."],
     18: [images.pipes2, images.pipes2_shadow,
-         "Трубы для систем жизнеобеспечения"],
+         "Трубы для систем жизнеобеспечения."],
     19: [images.pipes3, images.pipes3_shadow,
-         "Трубы для систем жизнеобеспечения"],
+         "Трубы для систем жизнеобеспечения."],
     20: [images.door, images.door_shadow, "Безопасная дверь. Открывается автоматически \n"
                                           "(для космонавтов в исправных скафандрах)."],
     21: [images.door, images.door_shadow, "Дверь шлюза."
          "В целях безопасности для её открытия требуется два человека."],
     22: [images.door, images.door_shadow, "Запертая дверь. Для её открытия требуется " \
-     + PLAYER_NAME + "карта доступа"],
+     + PLAYER_NAME + " карта доступа."],
     23: [images.door, images.door_shadow, "Запертая дверь. Нужна " \
-         + FRIEND1_NAME + "карта доступа"],
+         + FRIEND1_NAME + " карта доступа."],
     24: [images.door, images.door_shadow, "Запертая дверь. Нужна " \
-         + FRIEND2_NAME + "карта доступа"],
+         + FRIEND2_NAME + " карта доступа."],
     25: [images.door, images.door_shadow,
-    "Запертая дверь. Она открывается из главного центра управления"],
+    "Запертая дверь. Она открывается из главного центра управления."],
     26: [images.door, images.door_shadow,
     "Запертая дверь в инженерном отсеке"],
     27: [images.map, images.full_shadow,
@@ -202,10 +203,10 @@ objects = {
         + str(LANDER_SECTOR) + " // X: " + str(LANDER_X) + \
         " // Y: " + str(LANDER_Y)],
     28: [images.rock_large, images.rock_large_shadow,
-         "Камень. Его грубая поверхность похожа на точильный камень", "камень"],
+         "Камень. Его грубая поверхность похожа на точильный камень.", "камень"],
          29: [images.rock_small, images.rock_small_shadow,
-    "Маленький, но тяжёлый кусок марсианского камня"],
-    30: [images.crater, None, "Кратер на поверхности планеты"],
+    "Маленький, но тяжёлый кусок марсианского камня."],
+    30: [images.crater, None, "Кратер на поверхности планеты."],
     31: [images.fence, None,
     "Тонкая сетчатая ограда. Она помогает защитить станцию от пылевых бурь"],
     32: [images.contraption, images.contraption_shadow,
@@ -219,7 +220,7 @@ objects = {
     37: [images.science_lab_table, None,
          "Таблица экспериментов, анализ почвы и пыли планеты"],
     38: [images.vending_machine, images.full_shadow,
-         "Торговый автомат. Для него нужен кредит.", "торговый автомат"],
+         "Торговый автомат. Для него нужен жетон.", "торговый автомат"],
     39: [images.floor_pad, None,
          "Датчик давления, чтобы никто не выходил один."],
     40: [images.rescue_ship, images.rescue_ship_shadow, "Спасательный корабль!"],
@@ -252,7 +253,7 @@ objects = {
     57: [images.needle, None,
          "Острая игла с растения кактуса", "кактусовая игла"],
     58: [images.threaded_needle, None,
-         "Игла кактуса, протыкающая кусок бечевки", "игла и бечевка"],
+         "Игла кактуса с куском бечевки", "игла и бечевка"],
     59: [images.canister, None,
          "В баллоне с воздухом течь.", "негерметичный баллон с воздухом"],
     60: [images.canister, None,
@@ -291,7 +292,7 @@ objects = {
     "Острые как бритва ножницы. Осторожно!", "заточенные ножницы"],
     78: [images.credit, None,
      "Мелкая монета для станционных торговых автоматов",
-     "станционный кредит"],
+     "жетон для торгового автомата"],
     79: [images.access_card, None,
          "Эта карта доступа принадлежит " + PLAYER_NAME, "карта доступа"],
     80: [images.access_card, None,
@@ -685,7 +686,7 @@ def draw():
         return
 
     # Очистите игровую арену.
-    box = Rect((0, 180), (800, 600))
+    box = Rect((0, 180), (800, 570))
     screen.draw.filled_rect(box, RED)
     box = Rect ((0, 0), (800, top_left_y + (room_height - 1)*30))
     screen.surface.set_clip(box)
@@ -765,11 +766,16 @@ def adjust_wall_transparency():
 def show_text(text_to_show, line_number):
     if game_over:
         return
+    if line_number == 0: # цвет текста в зависимости от линии вывода
+        color = PURPLE
+    elif line_number == 1:
+        color = GREEN
+    else: color = WHITE
     text_lines = [15, 50]
     box = Rect((0, text_lines[line_number]), (800, 35))
     screen.draw.filled_rect(box, BLACK)
     screen.draw.text(text_to_show,
-                     (20, text_lines[line_number]), color=GREEN)
+                     (20, text_lines[line_number]), color=color)
 
 
 ##############
@@ -937,7 +943,7 @@ def examine_object():
                 and details[2] == left_tile_of_item
                 and room_map[details[1]][details[2]] != prop_number):
                 add_object(prop_number)
-                description = "You found " + objects[prop_number][3]
+                description = "Ты нашёл " + objects[prop_number][3]
                 sounds.combine.play()
     show_text(description, 0)
     time.sleep(0.5)
@@ -1032,7 +1038,7 @@ def use_object():
 
     elif item_player_is_on == 40:
         clock.unschedule(air_countdown)
-        show_text("Поздравляют, "+ PLAYER_NAME +"!", 0)
+        show_text("Поздравляю, "+ PLAYER_NAME +"!", 0)
         show_text("Миссия выполнена! Вы добрались до безопасного места.", 1)
         game_over = True
         sounds.take_off.play()
@@ -1236,18 +1242,18 @@ def door_in_room_26():
 ###############
 
 def draw_energy_air():
-    box = Rect((20, 765), (350, 20))
+    box = Rect((10, 765), (500, 20))
     screen.draw.filled_rect(box, BLACK)
-    screen.draw.text("ВОЗДУХ", (20, 766), color=BLUE)
-    screen.draw.text("ЭНЕРГИЯ", (180, 766), color=YELLOW)
+    screen.draw.text("ВОЗДУХ", (10, 768), color=BLUE)
+    screen.draw.text("ЭНЕРГИЯ", (200, 768), color=YELLOW)
 
     if air > 0:
-        box = Rect((50, 765), (air, 20))
-        screen.draw.filled_rect(box, BLUE) # Нарисовать новую воздушную полосу.
+        box = Rect((86, 765), (air, 20))
+        screen.draw.filled_rect(box, BLUE) # Нарисовать новую шкалу для воздуха.
 
     if energy > 0:
-        box = Rect((250, 765), (energy, 20))
-        screen.draw.filled_rect(box, YELLOW) # Нарисовать новую шкалу энергии.
+        box = Rect((285, 765), (energy, 20))
+        screen.draw.filled_rect(box, YELLOW) # Нарисовать новую шкалу для энергии.
 
 def end_the_game(reason):
     global game_over
@@ -1255,7 +1261,7 @@ def end_the_game(reason):
     game_over = True
     sounds.say_mission_fail.play()
     sounds.gameover.play()
-    screen.draw.text("ИГРА ОКОНЧЕНА", (120, 400), color = "white",
+    screen.draw.text("ИГРА ОКОНЧЕНА", (11, 400), color = "white",
                      fontsize = 128, shadow = (1, 1), scolor = "black")
 
 def air_countdown():
@@ -1273,7 +1279,7 @@ def air_countdown():
 
 def alarm():
     show_text("Заканчивается воздух, " + PLAYER_NAME
-              + "! Доберись до безопасного места и вызови помощь по радиосвязи!", 1)
+              + "!\n Доберись до безопасного места и вызови помощь по радиосвязи!", 1)
     sounds.alarm.play(3)
     sounds.say_breach.play()
 
