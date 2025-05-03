@@ -424,7 +424,7 @@ def generate_map():
         room_map.append([side_edge]
                         + [floor_type]*(room_width - 2) + [side_edge])
 
-# Добавить нижнюю линию карты комнаты.
+    # Добавить нижнюю линию карты комнаты.
     room_map.append([bottom_edge] * room_width)
 
     # Добавить дверные проёмы.
@@ -440,8 +440,6 @@ def generate_map():
         room_to_left = GAME_MAP[current_room - 1]
 
     # Если в комнате слева есть выход направо, добавьте выход налево в эту комнату
-
-
         if room_to_left[4]:
             room_map[middle_row][0] = floor_type
             room_map[middle_row + 1][0] = floor_type
@@ -455,10 +453,7 @@ def generate_map():
     if current_room <= MAP_SIZE - MAP_WIDTH: # Если комната не находится в нижнем ряду
         room_below = GAME_MAP[current_room+MAP_WIDTH]
 
-
     # Если в комнате под вами есть верхний выход, добавьте выход в нижней части этой комнаты
-
-
         if room_below[3]:
             room_map[room_height-1][middle_column] = floor_type
             room_map[room_height-1][middle_column + 1] = floor_type
@@ -881,7 +876,7 @@ def add_object(item):  # Добавляет предмет в инвентарь
     props[item][0] = 0  # Переносимые предметы попадают в комнату 0 (вне карты).
 
 def display_inventory():
-    box = Rect((0, 100), (800, 95))
+    box = Rect((0, 91), (800, 95))
     screen.draw.filled_rect(box, BLACK)
 
     if len(in_my_pockets) == 0:
@@ -894,7 +889,7 @@ def display_inventory():
     for item_counter in range(len(list_to_show)):
         item_number = list_to_show[item_counter]
         image = objects[item_number][0]
-        screen.blit(image, (25 + (46 * item_counter), 100))
+        screen.blit(image, (23 + (46 * item_counter), 100))
 
     box_left = (selected_marker * 46) - 3
     box = Rect((22 + box_left, 95), (40, 40))
