@@ -231,6 +231,27 @@ while main:
         t = random.uniform(0, 300)
         s.update(timeout, addx, addy)
 
+
+# вариант, предложенный ИИ
+    collisions = []
+    for sprite1 in enemy_list.sprites():
+        for sprite2 in enemy_list.sprites():
+            if sprite1 != sprite2 and pygame.sprite.collide_rect(sprite1, sprite2):
+                collisions.append((sprite1, sprite2))
+
+    # Обрабатываем столкновения
+    for collided_pair in collisions:
+        ghost1, ghost2 = collided_pair
+        # Тут можно задать поведение при столкновении,
+        # например, поменять направление движения одного из привидений
+        ghost1.update(0.1, -1, 1)
+        ghost2.update(0.1, 1, 1)
+
+
+
+
+
+
     pygame.display.update()
     if not len(enemy_list):  #все враги съедены, добавляются новые, счетчик съеденных обнуляется
         eated_ghost = ["Pacman is hungry!"]
