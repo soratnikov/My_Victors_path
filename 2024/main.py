@@ -1,10 +1,8 @@
-# light pac-man
+# light pac-man all done
 
 import os
-import numpy as np
 import pygame
 import random
-
 '''
 Переменные и константы
 '''
@@ -17,12 +15,12 @@ size = 45
 addx = 1
 addy = 1
 f = 10
+eated_ghost = ["Pacman is hungry"]
 
 '''
 Объекты
 '''
-
-
+pygame.init()
 class Pacman(pygame.sprite.Sprite):
     #Класс с Pacman:
     def __init__(self):
@@ -47,7 +45,6 @@ class Pacman(pygame.sprite.Sprite):
 
         self.rect.x += self.movex
         self.rect.y += self.movey
-
         self.position = 0
 
         #влево:
@@ -84,7 +81,6 @@ class Pacman(pygame.sprite.Sprite):
             self.position = 3
             # print('self.frameDOWN=', self.frame, self.position)
 
-
 class Enemy(pygame.sprite.Sprite):
     #класс с привидениями:
     def __init__(self, name):
@@ -107,16 +103,12 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self, timeout, addx, addy):
         #Перемещение спрайта привидений:
-
         r = self.rect
         r.x += self.speedx * self.addx
         r.y += self.speedy * self.addy
 
-        #Ограничение игрового поля для приведений и изменение вектора скорости каждые 5 секунд
-        bump_kill = False
-        pac_man_bump = pygame.sprite.groupcollide(pac_man_list, enemy_list, bump_kill, True)
-
-
+        #Ограничение игрового поля для приведений и изменение вектора скорости при столкновении
+        pac_man_bump = pygame.sprite.groupcollide(pac_man_list, enemy_list, False, False)
 
         if ((r.left < 1) or (r.right > BOARD_X - 2)) \
             or pac_man.position == 1 and pac_man_bump \
@@ -130,32 +122,35 @@ class Enemy(pygame.sprite.Sprite):
             or pac_man.position == 3 and pac_man_bump:
                 self.speedy *= -1
 
-
         if pac_man.position == 0 and pac_man_bump:
-            bump_kill == True
             self.speedx *= -1
             self.speedy *= -1
 
+        # Если произошло столкновение между Пакманом и врагом
+        if len(pac_man_bump) > 0:
+            for key in pac_man_bump.keys():
+                # Получаем список привидений, с которыми столкнулся Пакман
+                enemies_collided = pac_man_bump[key]
 
-        # if timeout // 5:
+                # Проверяем каждый объект-привидение
+                for enemy in enemies_collided:
+                    global eated_ghost
+                    # Здесь получаем имя привидения, которое схватил Пакман
+                    eated_ghost.append(enemy.name)
+                    # print(f"Пакман съел {enemy.name}")
+
+                    # Теперь можно удалить привидение
+                    enemy.kill()
+
+
+
+                        # if timeout // 5:
         #     self.addx = np.sin((2 * np.pi * f) / 100 * timeout)
 
         #x = A*sin(w*t), где w = 2*pi*f/fd, A - амплитуда волны - формула из радиотехники :)
 
-
-
         # if timeout // 5:
         #     self.addy = np.sin((2 * np.pi * f) / 100 * timeout)
-
-
-
-
-
-
-    def get_name(self):
-        # return self.name
-        print (self.name)
-
 
 '''
 Настройка
@@ -175,8 +170,7 @@ pac_man_list.add(pac_man)
 reset_time = 1
 kill = True
 
-myfont = pygame.font.Font('Fonts/Jersey10Charted-Regular.ttf', 100)
-
+myfont = pygame.font.Font('Fonts/Jersey10Charted-Regular.ttf', 84)
 
 def add_enemys():
     names = ['blue', 'orange', 'pink', 'red']
@@ -186,16 +180,13 @@ def add_enemys():
         # print(e.name)
 
 steps = 3
-
 '''
 Игровой цикл
 '''
-
 while main:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-
         #Управление Pacman, клавиша нажата
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
@@ -206,7 +197,6 @@ while main:
                 pac_man.move(0, -steps)
             elif event.key == pygame.K_DOWN:
                 pac_man.move(0, steps)
-
         #Управление Pacman, клавиша отжата
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
@@ -220,10 +210,18 @@ while main:
 
     timeout = int((pygame.time.get_ticks() / 1000))  #прошло времени в секундах
 
-    # print(timeout)
     text_surface_time = myfont.render(str(timeout), True, 'White')
-    pac_man.rect.clamp_ip(boardbox)  #Pacman останавливается при столкновении со стеной
+
+    if len(eated_ghost) > 1:
+        color_ghost = str(eated_ghost[-1])
+        print(color_ghost)
+    else:
+        color_ghost = "brown"
+    eated_ghost_text_surface = myfont.render(f'Pacman ate: {str(eated_ghost[-1])}', True, color_ghost)
+
+    pac_man.rect.clamp_ip(boardbox) #Pacman останавливается при столкновении со стеной
     board.blit(bg_img, boardbox)
+    board.blit(eated_ghost_text_surface, (15, 120))
     board.blit(text_surface_time, (15, 15))
     pac_man_list.update()
     pac_man_list.draw(board)
@@ -231,32 +229,10 @@ while main:
 
     for s in enemy_list:
         t = random.uniform(0, 300)
-    #
-        print(s.name)
-    #
-    #
-        # pac_man_bump = pygame.sprite.spritecollide(pac_man, enemy_list, False)
-    #
-    #     if pac_man.position == (1 and pac_man_bump) or (2 and pac_man_bump) or (3 and pac_man_bump):
-    #         s.speedx += -1
-    #         s.speedy += -1
-    #
-    #         for i in range(2):
-    #             print("goal!")
-
-        # if pac_man.position == 0:
-        #     kill = True
-        #     hit_kill = pygame.sprite.spritecollide(pac_man, enemy_list, kill)  #проверка столкновения
-        #     if hit_kill:
-        #         for enemy in enemy_list.sprites():
-        #             print(enemy.name)
-        #         # print(f'I eat {enemy_list[i].name} something monster')
-                # print(enemy.name)
-        # else:
-        #     pass
         s.update(timeout, addx, addy)
 
     pygame.display.update()
-    if not len(enemy_list):  #все враги съедены, добавляются новые
+    if not len(enemy_list):  #все враги съедены, добавляются новые, счетчик съеденных обнуляется
+        eated_ghost = ["Pacman is hungry!"]
         add_enemys()
     clock.tick(fps)
